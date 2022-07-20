@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+    drupal:
+        container_name: testdrupal
+        networks:
+            - drupalnetwork
+        ports:
+            - '80:80'
+        image: 'drupal:9-php7.4-apache'
+        depends_on:
+            - "mariadb"
+    phpmyadmin:
+        networks:
+            - drupalnetwork
+        container_name: myadmin
+        environment:
+            - PMA_HOST=drupaldb
+        ports:
+            - '8080:80'
+        image: phpmyadmin
+        depends_on:
+            - "mariadb"
+    mariadb:
+        networks:
+            - drupalnetwork
+        image: "mariadb:${MARIADB_VERSION}"
+        container_name: drupaldb
+        hostname: drupaldb
+        restart: 'always'
+        volumes: 
+          - /var/lib/mysql/data:${MARIADB_DATA_DIR}
+          - /var/lib/mysql/logs:${MARIADB_LOG_DIR}
+          - /var/docker/mariadb/conf:/etc/mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+          MYSQL_DATABASE: ${MYSQL_DATABASE}
+          MYSQL_USER: ${MYSQL_USER}
+          MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+networks:
+    drupalnetwork:
+        external: false
+        name: drupalnetwork
