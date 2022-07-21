@@ -7,6 +7,8 @@ This also allows you to add any other modules you want to install on the initial
 
 It is a combination of a docker compose file plus a batch script.  The batch script is set for Windows but should work on Linux as well.  You just need to change the EOL settings. 
 
+Make sure all the files are downloaded in the same directory before you run the script. 
+
 The Items that need to be edited to your specific needs are:
 
 d9civi.env: 
